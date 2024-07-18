@@ -49,7 +49,6 @@ const RootLayout = () => {
 	useEffect(() => {
 		loadSQLiteDb()
 			.then(() => {
-				console.log('got loaded');
 				setDBLoaded(true);
 			})
 			.catch((e) => console.error(e));
@@ -59,17 +58,31 @@ const RootLayout = () => {
 		return null;
 	}
 
+	if (!dbLoaded) {
+		return (
+			<View className="flex-1">
+				<ActivityIndicator size={'large'} />
+				<Text>Loading Database...</Text>
+			</View>
+		);
+	}
+
 	return (
 		<Suspense
 			fallback={
-				<View className="flex-1 bg-red">
+				<View className="flex-1">
 					<ActivityIndicator size="large" />
 					<Text>Loading...</Text>
 				</View>
 			}
 		>
 			<SQLiteProvider useSuspense={true} databaseName="ChargingHub.db">
-				<Stack>
+				<Stack
+					screenOptions={{
+						title: '',
+						headerTintColor: '#027162'
+					}}
+				>
 					<Stack.Screen
 						name="index"
 						options={{ headerShown: false, title: 'Home' }}

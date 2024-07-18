@@ -31,6 +31,7 @@ const TabsLayout = () => {
 		<>
 			<Tabs
 				screenOptions={{
+					headerShown: false,
 					tabBarShowLabel: false,
 					tabBarActiveTintColor: '#fff',
 					tabBarInactiveTintColor: '#CDCDE0',
@@ -68,19 +69,6 @@ const TabsLayout = () => {
 								color={color}
 								focused={focused}
 								name="Profile"
-							/>
-						)
-					}}
-				/>
-				<Tabs.Screen
-					name="edit"
-					options={{
-						tabBarIcon: ({ color, focused }) => (
-							<TabIcon
-								icon={<FontAwesome6 name="pencil" color={color} size={15} />}
-								color={color}
-								focused={focused}
-								name="Edit"
 							/>
 						)
 					}}

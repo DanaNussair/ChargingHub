@@ -5,7 +5,5 @@ export const getData = async (db: SQLiteDatabase) => {
 	const result = await db.getAllAsync<ChargingPointsType>(
 		'SELECT * FROM ChargingPoints'
 	);
-	console.log('results: ', result);
-
 	return result;
 };
