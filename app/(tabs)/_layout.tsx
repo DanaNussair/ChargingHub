@@ -48,11 +48,7 @@ const TabsLayout = () => {
 						tabBarIcon: ({ color, focused }) => (
 							<TabIcon
 								icon={
-									<FontAwesome6
-										name="circle-plus"
-										color={focused ? 'white' : '#CDCDE0'}
-										size={15}
-									/>
+									<FontAwesome6 name="circle-plus" color={color} size={15} />
 								}
 								color={color}
 								focused={focused}
@@ -67,12 +63,7 @@ const TabsLayout = () => {
 						tabBarIcon: ({ color, focused }) => (
 							<TabIcon
 								icon={
-									<FontAwesome6
-										name="user"
-										color={focused ? 'white' : '#CDCDE0'}
-										solid
-										size={15}
-									/>
+									<FontAwesome6 name="user" color={color} solid size={15} />
 								}
 								color={color}
 								focused={focused}
@@ -86,13 +77,7 @@ const TabsLayout = () => {
 					options={{
 						tabBarIcon: ({ color, focused }) => (
 							<TabIcon
-								icon={
-									<FontAwesome6
-										name="pencil"
-										color={focused ? 'white' : '#CDCDE0'}
-										size={15}
-									/>
-								}
+								icon={<FontAwesome6 name="pencil" color={color} size={15} />}
 								color={color}
 								focused={focused}
 								name="Edit"

@@ -1,8 +1,10 @@
 import { View, TouchableOpacity, Text } from 'react-native';
-
-import SearchableDropdown from '@/components/SearchableDropdown';
 import { SetStateAction, useMemo, useState } from 'react';
 import { ValueType } from 'react-native-dropdown-picker';
+import { useSQLiteContext } from 'expo-sqlite';
+
+import { getData } from '@/helpers/db';
+import SearchableDropdown from '@/components/SearchableDropdown';
 import useFetch from '@/hooks/useFetch';
 
 const AVAILABILITY = [
@@ -33,6 +35,7 @@ type SelectedValueType = {
 };
 
 const AddChargingPoint = () => {
+	const db = useSQLiteContext();
 	const [selectedValue, setSelectedValue] = useState<SelectedValueType>({
 		location: null,
 		chargerType: null,
@@ -51,7 +54,7 @@ const AddChargingPoint = () => {
 
 			return {
 				label: title,
-				value: item.id || '0'
+				value: title
 			};
 		});
 	}, [data]);
@@ -62,6 +65,27 @@ const AddChargingPoint = () => {
 	) {
 		setSelectedValue((prev) => ({ ...prev, [stateToChange]: value }));
 	}
+
+	const addChargingPoint = async (chargingPoint: SelectedValueType) => {
+		db.withTransactionAsync(async () => {
+			await db.runAsync(
+				'INSERT INTO ChargingPoints (address, charging_type, availability) VALUES (?, ?, ?);',
+				[
+					chargingPoint.location,
+					chargingPoint.chargerType,
+					chargingPoint.availability
+				]
+			);
+
+			await getData(db);
+		});
+
+		setSelectedValue({
+			location: null,
+			chargerType: null,
+			availability: null
+		});
+	};
 
 	return (
 		<View className="flex-1 justify-between">
@@ -91,7 +115,12 @@ const AddChargingPoint = () => {
 			</View>
 
 			<TouchableOpacity
-				onPress={() => {}}
+				disabled={
+					!selectedValue.location ||
+					!selectedValue.availability ||
+					!selectedValue.chargerType
+				}
+				onPress={() => addChargingPoint(selectedValue)}
 				className="m-4 bg-secondary p-2 justify-center items-center rounded"
 				activeOpacity={0.8}
 			>

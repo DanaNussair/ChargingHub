@@ -20,7 +20,7 @@ const useFetch = <T>(
 			try {
 				setLoading(true);
 				const response = await fetch(url, { method });
-				console.log(response);
+
 				if (response.status === 404) {
 					setError('Not found');
 				}

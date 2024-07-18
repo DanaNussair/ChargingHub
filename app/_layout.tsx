@@ -1,10 +1,31 @@
 import { useFonts } from 'expo-font';
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { SplashScreen, Stack } from 'expo-router';
+import * as FileSystem from 'expo-file-system';
+import { Asset } from 'expo-asset';
+import { SQLiteProvider } from 'expo-sqlite';
+import { ActivityIndicator, Text, View } from 'react-native';
 
 SplashScreen.preventAutoHideAsync();
 
+const loadSQLiteDb = async () => {
+	const dbName = 'ChargingHub.db';
+	const dbAsset = require('../assets/ChargingHub.db');
+	const dbUri = Asset.fromModule(dbAsset).uri;
+	const dbFilePath = `${FileSystem.documentDirectory}SQLite/${dbName}`;
+
+	const fileInfo = await FileSystem.getInfoAsync(dbFilePath);
+	if (!fileInfo.exists) {
+		await FileSystem.makeDirectoryAsync(
+			`${FileSystem.documentDirectory}SQLite`,
+			{ intermediates: true }
+		);
+		await FileSystem.downloadAsync(dbUri, dbFilePath);
+	}
+};
+
 const RootLayout = () => {
+	const [dbLoaded, setDBLoaded] = useState<boolean>(false);
 	const [fontsLoaded, error] = useFonts({
 		'Poppins-Black': require('../assets/fonts/Poppins-Black.ttf'),
 		'Poppins-Bold': require('../assets/fonts/Poppins-Bold.ttf'),
@@ -25,17 +46,37 @@ const RootLayout = () => {
 		}
 	}, [fontsLoaded, error]);
 
+	useEffect(() => {
+		loadSQLiteDb()
+			.then(() => {
+				console.log('got loaded');
+				setDBLoaded(true);
+			})
+			.catch((e) => console.error(e));
+	}, []);
+
 	if (!fontsLoaded && !error) {
 		return null;
 	}
 
 	return (
-		<Stack>
-			<Stack.Screen
-				name="index"
-				options={{ headerShown: false, title: 'Home' }}
-			/>
-		</Stack>
+		<Suspense
+			fallback={
+				<View className="flex-1 bg-red">
+					<ActivityIndicator size="large" />
+					<Text>Loading...</Text>
+				</View>
+			}
+		>
+			<SQLiteProvider useSuspense={true} databaseName="ChargingHub.db">
+				<Stack>
+					<Stack.Screen
+						name="index"
+						options={{ headerShown: false, title: 'Home' }}
+					/>
+				</Stack>
+			</SQLiteProvider>
+		</Suspense>
 	);
 };
 
