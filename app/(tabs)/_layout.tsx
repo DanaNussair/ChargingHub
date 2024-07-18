@@ -1,37 +1,108 @@
+import React, { ReactNode } from 'react';
 import { Tabs } from 'expo-router';
-import React from 'react';
+import { Dimensions, Text, View } from 'react-native';
+import { FontAwesome6 } from '@expo/vector-icons';
 
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+type TabIconProps = {
+	icon: ReactNode;
+	color: string;
+	focused: boolean;
+	name: string;
+};
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+const { height } = Dimensions.get('window');
 
-  return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
-        }}
-      />
-    </Tabs>
-  );
-}
+const TabIcon = ({ icon, color, focused, name }: TabIconProps) => {
+	return (
+		<View className="justify-center items-center gap-2">
+			{icon}
+			<Text
+				className={`${focused ? 'font-psemibold' : 'font-pregular'} text-xs`}
+				style={{ color }}
+			>
+				{name}
+			</Text>
+		</View>
+	);
+};
+
+const TabsLayout = () => {
+	return (
+		<>
+			<Tabs
+				screenOptions={{
+					tabBarShowLabel: false,
+					tabBarActiveTintColor: '#fff',
+					tabBarInactiveTintColor: '#CDCDE0',
+					tabBarStyle: {
+						backgroundColor: '#027162',
+						borderTopWidth: 5,
+						borderTopColor: '#027162',
+						height: height * 0.1
+					}
+				}}
+			>
+				<Tabs.Screen
+					name="add"
+					options={{
+						tabBarIcon: ({ color, focused }) => (
+							<TabIcon
+								icon={
+									<FontAwesome6
+										name="circle-plus"
+										color={focused ? 'white' : '#CDCDE0'}
+										size={15}
+									/>
+								}
+								color={color}
+								focused={focused}
+								name="Add"
+							/>
+						)
+					}}
+				/>
+				<Tabs.Screen
+					name="profile"
+					options={{
+						tabBarIcon: ({ color, focused }) => (
+							<TabIcon
+								icon={
+									<FontAwesome6
+										name="user"
+										color={focused ? 'white' : '#CDCDE0'}
+										solid
+										size={15}
+									/>
+								}
+								color={color}
+								focused={focused}
+								name="Profile"
+							/>
+						)
+					}}
+				/>
+				<Tabs.Screen
+					name="edit"
+					options={{
+						tabBarIcon: ({ color, focused }) => (
+							<TabIcon
+								icon={
+									<FontAwesome6
+										name="pencil"
+										color={focused ? 'white' : '#CDCDE0'}
+										size={15}
+									/>
+								}
+								color={color}
+								focused={focused}
+								name="Edit"
+							/>
+						)
+					}}
+				/>
+			</Tabs>
+		</>
+	);
+};
+
+export default TabsLayout;
