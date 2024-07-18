@@ -1,11 +1,10 @@
 import { View, Text, FlatList } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { ChargingPointsType } from '@/types/db';
-import { useSQLiteContext } from 'expo-sqlite';
-import { getData } from '@/helpers/db';
 import { TouchableOpacity } from 'react-native';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import { useChargingPoints } from '@/contexts/ChargingPointsContextProvider';
 
 const Item = ({
 	chargingPoint,
@@ -49,29 +48,26 @@ const Item = ({
 };
 
 const Profile = () => {
-	const [data, setData] = useState<ChargingPointsType[]>([]);
-	const db = useSQLiteContext();
+	const { chargingPoints: data, deletePoint } = useChargingPoints();
 
-	useEffect(() => {
-		db.withTransactionAsync(async () => {
-			const results = await getData(db);
-			setData(results);
-		});
-	}, [db]);
-
-	const deleteChargingPoint = async (id: number) => {
-		db.withTransactionAsync(async () => {
-			await db.runAsync(`DELETE FROM ChargingPoints WHERE id = ?;`, [id]);
-			const results = await getData(db);
-			setData(results);
-		});
-	};
+	if (!data.length) {
+		return (
+			<View className="flex-1 justify-center items-center">
+				<Text className="font-pbold text-lg text-secondary">
+					No charging points to show
+				</Text>
+			</View>
+		);
+	}
 
 	return (
 		<FlatList
 			data={data}
 			renderItem={({ item }) => (
-				<Item chargingPoint={item} deleteChargingPoint={deleteChargingPoint} />
+				<Item
+					chargingPoint={item}
+					deleteChargingPoint={async () => await deletePoint(item)}
+				/>
 			)}
 		/>
 	);

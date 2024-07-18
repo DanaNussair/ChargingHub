@@ -5,6 +5,7 @@ import * as FileSystem from 'expo-file-system';
 import { Asset } from 'expo-asset';
 import { SQLiteProvider } from 'expo-sqlite';
 import { ActivityIndicator, Text, View } from 'react-native';
+import { ChargingPointsProvider } from '@/contexts/ChargingPointsContextProvider';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -77,17 +78,19 @@ const RootLayout = () => {
 			}
 		>
 			<SQLiteProvider useSuspense={true} databaseName="ChargingHub.db">
-				<Stack
-					screenOptions={{
-						title: '',
-						headerTintColor: '#027162'
-					}}
-				>
-					<Stack.Screen
-						name="index"
-						options={{ headerShown: false, title: 'Home' }}
-					/>
-				</Stack>
+				<ChargingPointsProvider>
+					<Stack
+						screenOptions={{
+							title: '',
+							headerTintColor: '#027162'
+						}}
+					>
+						<Stack.Screen
+							name="index"
+							options={{ headerShown: false, title: 'Home' }}
+						/>
+					</Stack>
+				</ChargingPointsProvider>
 			</SQLiteProvider>
 		</Suspense>
 	);
