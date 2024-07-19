@@ -36,6 +36,17 @@ This project implements a simple react-native application called `ChargingHub` w
    → Caused by: Error code : no such table: ChargingPoints]
    ```
 
+## Backlog fixes
+- Code repetition between `add.tsx` & `edit.tsx`, I still want to eliminate that in order to have better shareable components.
+
+- Typescript complains about certain parts of the code.
+
+- The TextInputs display values directly from the DB instead of the label intended.
+
+- Need to make sure that I prevent queries from being ran without sanitizing the values first.
+
+- Add unit testing.
+
 ## Notes
 A `.sql` file can be found in the root folder which includes a couple of SQL statement to if needed.
 
