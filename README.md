@@ -1,6 +1,7 @@
-# Welcome to your Expo app 👋
+## Introduction
+This project implements a simple react-native application called `ChargingHub` which allows users to register electric vehicle charging points usings `location`, `chargerType`, `availability`. They can also view, edit, and delete these entries.
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+
 
 ## Get started
 
@@ -12,39 +13,32 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 
 2. Start the app
 
-   ```bash
-    npx expo start
+   ```
+   npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+## Screens
+- Splash screen upon starting
+- Navigate to tab screen where there are an `Add` & `Profile` tabs.
+- `Add` tab allows user to add charging points.
+- `Profile` tab allows user to see all the charging points added. They can also delete points and choose to modify.
+- Modifying navigates to the `Edit` screen which allows the user to modify the selected point.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Challenges faced
+- Faced challenges in using pre-built libraries for dropdown/searchable dropdown components. Nothing seem to work as expected and most rendered unusable. I opted to build my own component for the time being.
+   - For example, I tried using `react-native-autocomplete-dropdown` but the dropdown would not open. I could not find out the reason why.
+   - Then I switched to `react-native-search-dropdown-picker` which had a severe zIndex issue and all dropdowns overlapped.
 
-## Get a fresh project
+- The SQLite database could only be initiated on iOS and I will keep looking into it to find out why.
+   ```
+   Failed to fetch charging points [Error: Call to function 'NativeDatabase.prepareAsync' has been rejected.
+   → Caused by: Error code : no such table: ChargingPoints]
+   ```
 
-When you're ready, run:
+## Notes
+A `.sql` file can be found in the root folder which includes a couple of SQL statement to if needed.
 
-```bash
-npm run reset-project
-```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
 
-## Learn more
 
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.

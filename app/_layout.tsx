@@ -89,6 +89,7 @@ const RootLayout = () => {
 							name="index"
 							options={{ headerShown: false, title: 'Home' }}
 						/>
+						<Stack.Screen name="edit" options={{ title: 'Edit' }} />
 					</Stack>
 				</ChargingPointsProvider>
 			</SQLiteProvider>

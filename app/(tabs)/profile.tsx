@@ -38,7 +38,9 @@ const Item = ({
 				</TouchableOpacity>
 				<TouchableOpacity
 					activeOpacity={0.7}
-					onPress={() => router.push('/edit')}
+					onPress={() =>
+						router.push({ pathname: '/edit', params: { id: chargingPoint.id } })
+					}
 				>
 					<FontAwesome6 name="pencil" color="#027162" size={22} />
 				</TouchableOpacity>

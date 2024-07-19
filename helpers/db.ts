@@ -21,14 +21,28 @@ export const addChargingPoint = async (
 				chargingPoint.availability
 			]
 		);
-
-		await getChargingPoints(db);
 	});
 };
 
 export const deleteChargingPoint = async (db: SQLiteDatabase, id: number) => {
 	db.withTransactionAsync(async () => {
 		await db.runAsync(`DELETE FROM ChargingPoints WHERE id = ?;`, [id]);
-		await getChargingPoints(db);
+	});
+};
+
+export const modifyChargingPoint = async (
+	db: SQLiteDatabase,
+	chargingPoint: ChargingPointsType
+) => {
+	db.withTransactionAsync(async () => {
+		await db.runAsync(
+			`UPDATE ChargingPoints SET address = ?, charging_type = ?, availability = ? WHERE id = ?;`,
+			[
+				chargingPoint.address,
+				chargingPoint.charging_type,
+				chargingPoint.availability,
+				chargingPoint.id
+			]
+		);
 	});
 };

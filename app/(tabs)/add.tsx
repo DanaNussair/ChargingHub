@@ -1,25 +1,11 @@
 import { View, TouchableOpacity, Text } from 'react-native';
-import { SetStateAction, useMemo, useState } from 'react';
-import { ValueType } from 'react-native-dropdown-picker';
+import { useMemo, useState } from 'react';
 
-import SearchableDropdown from '@/components/SearchableDropdown';
 import useFetch from '@/hooks/useFetch';
 import { useChargingPoints } from '@/contexts/ChargingPointsContextProvider';
-
-const AVAILABILITY = [
-	{ label: 'Occupied', value: 'occupied' },
-	{ label: 'Available', value: 'available' },
-	{ label: 'Offline', value: 'offline' }
-];
-
-const TYPES = [
-	{
-		label: 'Fast charger',
-		value: 'fast'
-	},
-	{ label: 'Standard charger', value: 'standard' },
-	{ label: 'Slow charger', value: 'slow' }
-];
+import { PickerItemType, SelectedChargingPointType } from '@/types';
+import { AVAILABILITY, TYPES } from '@/constants';
+import ModalPicker from '@/components/ModalPicker';
 
 type FetchedItemType = {
 	city: string;
@@ -27,26 +13,22 @@ type FetchedItemType = {
 	id: string;
 };
 
-type SelectedValueType = {
-	address: ValueType | null;
-	chargerType: ValueType | null;
-	availability: ValueType | null;
-};
-
 const AddChargingPoint = () => {
 	const { addPoint } = useChargingPoints();
-	const [selectedValue, setSelectedValue] = useState<SelectedValueType>({
-		address: null,
-		chargerType: null,
-		availability: null
-	});
+	const [selectedValue, setSelectedValue] = useState<SelectedChargingPointType>(
+		{
+			address: null,
+			chargerType: null,
+			availability: null
+		}
+	);
 
-	const { loading, data } = useFetch<FetchedItemType>(
+	const { data } = useFetch<FetchedItemType>(
 		'get',
 		'https://6696ddf20312447373c3f57e.mockapi.io/api/locations'
 	);
 
-	const suggestions = useMemo(() => {
+	const locationSuggestions = useMemo(() => {
 		return data.map((item: FetchedItemType) => {
 			const title =
 				item.city && item.country ? `${item.city}, ${item.country}` : '';
@@ -58,14 +40,11 @@ const AddChargingPoint = () => {
 		});
 	}, [data]);
 
-	function onValueSelected(
-		value: SetStateAction<ValueType | null>,
-		stateToChange: string
-	) {
+	function onValueSelected(value: PickerItemType, stateToChange: string) {
 		setSelectedValue((prev) => ({ ...prev, [stateToChange]: value }));
 	}
 
-	const onSubmit = async (chargingPoint: SelectedValueType) => {
+	const onSubmit = async (chargingPoint: SelectedChargingPointType) => {
 		if (
 			selectedValue.address &&
 			selectedValue.chargerType &&
@@ -87,27 +66,23 @@ const AddChargingPoint = () => {
 	return (
 		<View className="flex-1 justify-between">
 			<View>
-				<SearchableDropdown
+				<ModalPicker
 					label="Location"
-					loading={loading}
-					suggestions={suggestions}
 					selectedValue={selectedValue.address}
-					setSelectedValue={(value) => onValueSelected(value, 'address')}
-					zIndex={3000}
+					onSelectValue={(value) => onValueSelected(value, 'address')}
+					data={locationSuggestions}
 				/>
-				<SearchableDropdown
-					label="Charger type"
-					suggestions={TYPES}
+				<ModalPicker
+					label="Charging Type"
 					selectedValue={selectedValue.chargerType}
-					setSelectedValue={(value) => onValueSelected(value, 'chargerType')}
-					zIndex={2000}
+					onSelectValue={(value) => onValueSelected(value, 'chargerType')}
+					data={TYPES}
 				/>
-				<SearchableDropdown
+				<ModalPicker
 					label="Availability"
-					suggestions={AVAILABILITY}
 					selectedValue={selectedValue.availability}
-					setSelectedValue={(value) => onValueSelected(value, 'availability')}
-					zIndex={1000}
+					onSelectValue={(value) => onValueSelected(value, 'availability')}
+					data={AVAILABILITY}
 				/>
 			</View>
 

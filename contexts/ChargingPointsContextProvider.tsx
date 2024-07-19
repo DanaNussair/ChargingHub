@@ -8,7 +8,8 @@ import React, {
 import {
 	getChargingPoints,
 	addChargingPoint,
-	deleteChargingPoint
+	deleteChargingPoint,
+	modifyChargingPoint
 } from '@/helpers/db';
 import { useSQLiteContext } from 'expo-sqlite';
 import { ChargingPointsType } from '@/types/db';
@@ -27,6 +28,7 @@ interface ChargingPointsContextType {
 	addPoint: (chargingPoint: ChargingPointsType) => Promise<void>;
 	refreshPoints: () => Promise<void>;
 	deletePoint: (chargingPoint: ChargingPointsType) => Promise<void>;
+	modifyPoint: (chargingPoint: ChargingPointsType) => Promise<void>;
 }
 
 const ChargingPointsContext = createContext<
@@ -68,6 +70,16 @@ export const ChargingPointsProvider = ({
 		}
 	};
 
+	const modifyPoint = async (chargingPoint: ChargingPointsType) => {
+		console.log('modifyPoint');
+		try {
+			await modifyChargingPoint(db, chargingPoint);
+			await fetchChargingPoints(); // Refresh the list after adding a new point
+		} catch (error) {
+			console.error('Failed to add charging point', error);
+		}
+	};
+
 	const refreshPoints = async () => {
 		await fetchChargingPoints();
 	};
@@ -78,7 +90,13 @@ export const ChargingPointsProvider = ({
 
 	return (
 		<ChargingPointsContext.Provider
-			value={{ chargingPoints, addPoint, refreshPoints, deletePoint }}
+			value={{
+				chargingPoints,
+				addPoint,
+				refreshPoints,
+				deletePoint,
+				modifyPoint
+			}}
 		>
 			{children}
 		</ChargingPointsContext.Provider>
