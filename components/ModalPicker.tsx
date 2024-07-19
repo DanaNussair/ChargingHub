@@ -1,22 +1,22 @@
 import { View, Text, Modal, Pressable, TextInput } from 'react-native';
 import React, { useRef, useState } from 'react';
 import { Picker } from '@react-native-picker/picker';
-import { PickerItemType } from '@/types';
+import { DataItemType } from '@/types';
 import { FontAwesome6 } from '@expo/vector-icons';
 
 type ModalPickerProps = {
 	label: string;
 	defaultValue?: string | undefined;
-	data: PickerItemType[];
-	selectedValue: PickerItemType | null;
-	onSelectValue: (value: PickerItemType) => void;
+	data: DataItemType[];
+	selectedValue: string | undefined;
+	onSelectValue: (value: string) => void;
 };
 
 const ModalPicker = ({
 	label,
 	defaultValue = undefined,
 	data = [],
-	selectedValue = { value: '', label: '' },
+	selectedValue,
 	onSelectValue
 }: ModalPickerProps) => {
 	const [isOpen, setIsOpen] = useState(false);

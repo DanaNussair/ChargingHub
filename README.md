@@ -1,8 +1,6 @@
 ## Introduction
 This project implements a simple react-native application called `ChargingHub` which allows users to register electric vehicle charging points usings `location`, `chargerType`, `availability`. They can also view, edit, and delete these entries.
 
-
-
 ## Get started
 
 1. Install dependencies
@@ -15,6 +13,12 @@ This project implements a simple react-native application called `ChargingHub` w
 
    ```
    npx expo start
+   ```
+3. This project uses eslint and prettier to format the code according to a specific standard, to run the linter:
+   ```
+   npx expo lint 
+   // Or you can fix (fixable) linting issues using
+   npm run lint:fix
    ```
 
 ## Screens
@@ -41,9 +45,9 @@ https://github.com/user-attachments/assets/e54c0549-adfa-48b9-8471-510d82f15914
    This turned out to be a corrupt .db file that got generated while testing, when I deleted the file and started the emulator again, the issue went away.
 
 ## Backlog fixes
-- [ ] Code repetition between `add.tsx` & `edit.tsx`, I still want to eliminate that in order to have better shareable components.
+- [x] Code repetition between `add.tsx` & `edit.tsx`, I still want to eliminate that in order to have better shareable components.
 
-- [ ] Typescript complains about certain parts of the code.
+- [x] Typescript complains about certain parts of the code.
 
 - [ ] The TextInputs display values directly from the DB instead of the label intended.
 

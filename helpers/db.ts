@@ -1,15 +1,15 @@
-import { ChargingPointsType } from '@/types/db';
+import { SQLAddPointsType, SQLChargingPointsType } from '@/types/db';
 import { SQLiteDatabase } from 'expo-sqlite';
 
 export const getChargingPoints = async (db: SQLiteDatabase) => {
-	return await db.getAllAsync<ChargingPointsType>(
+	return await db.getAllAsync<SQLChargingPointsType>(
 		'SELECT * FROM ChargingPoints'
 	);
 };
 
 export const addChargingPoint = async (
 	db: SQLiteDatabase,
-	chargingPoint: ChargingPointsType
+	chargingPoint: SQLAddPointsType
 ) => {
 	return db.withTransactionAsync(async () => {
 		await db.runAsync(
@@ -31,7 +31,7 @@ export const deleteChargingPoint = async (db: SQLiteDatabase, id: number) => {
 
 export const modifyChargingPoint = async (
 	db: SQLiteDatabase,
-	chargingPoint: ChargingPointsType
+	chargingPoint: SQLChargingPointsType
 ) => {
 	return db.withTransactionAsync(async () => {
 		await db.runAsync(

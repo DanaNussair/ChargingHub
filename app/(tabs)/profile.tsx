@@ -1,6 +1,6 @@
 import { View, Text, FlatList, ScrollView, RefreshControl } from 'react-native';
 import React from 'react';
-import { ChargingPointsType } from '@/types/db';
+import { SQLChargingPointsType } from '@/types/db';
 import { TouchableOpacity } from 'react-native';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { router } from 'expo-router';
@@ -10,7 +10,7 @@ const Item = ({
 	chargingPoint,
 	deleteChargingPoint
 }: {
-	chargingPoint: ChargingPointsType;
+	chargingPoint: SQLChargingPointsType;
 	deleteChargingPoint: (id: number) => void;
 }) => {
 	const { refreshPoints } = useChargingPoints();
@@ -46,7 +46,7 @@ const Item = ({
 				<View className="p-2 flex-1 justify-end items-end gap-4">
 					<TouchableOpacity
 						activeOpacity={0.7}
-						onPress={() => deleteChargingPoint(chargingPoint.id)}
+						onPress={() => deleteChargingPoint(chargingPoint.id || NaN)}
 					>
 						<FontAwesome6 name="trash" color="#027162" size={22} />
 					</TouchableOpacity>

@@ -1,54 +1,40 @@
-import { Text, TouchableOpacity, View } from 'react-native';
-import React, { useMemo, useState } from 'react';
-import { useChargingPoints } from '@/contexts/ChargingPointsContextProvider';
+import { useMemo, useState } from 'react';
 import { router, useLocalSearchParams } from 'expo-router';
-import ModalPicker from '../components/ModalPicker';
-import { FetchedLocationType, SelectedChargingPointType } from '@/types';
-import useFetch from '@/hooks/useFetch';
-import { AVAILABILITY, TYPES } from '@/constants';
+import { SelectedChargingPointType } from '@/types';
+import { useChargingPoints } from '@/contexts/ChargingPointsContextProvider';
+import SelectPointsData from '@/components/SelectPointsData';
+import { Text, TouchableOpacity, View } from 'react-native';
 
 const Edit = () => {
-	const [selectedValue, setSelectedValue] = useState<SelectedChargingPointType>(
-		{
-			address: null,
-			chargerType: null,
-			availability: null
-		}
-	);
+	const { modifyPoint } = useChargingPoints();
 	const { id } = useLocalSearchParams();
-	const { chargingPoints, modifyPoint } = useChargingPoints();
-	const { data } = useFetch<FetchedLocationType>(
-		'get',
-		'https://6696ddf20312447373c3f57e.mockapi.io/api/locations'
+	const { chargingPoints } = useChargingPoints();
+
+	const [selectedValue, setSelectedValue] = useState<SelectedChargingPointType>(
+		{ address: '', availability: '', chargerType: '' }
 	);
-
-	const locationSuggestions = useMemo(() => {
-		return data.map((item: FetchedLocationType) => {
-			const title =
-				item.city && item.country ? `${item.city}, ${item.country}` : '';
-
-			return {
-				label: title,
-				value: title
-			};
-		});
-	}, [data]);
 
 	const currentChargingPoint = useMemo(() => {
 		const point = chargingPoints.find((el) => el.id === Number(id));
-		setSelectedValue({ ...point, chargerType: point?.charging_type });
+		setSelectedValue({
+			address: point?.address || '',
+			availability: point?.availability || '',
+			chargerType: point?.charging_type || ''
+		});
 		return point;
 	}, [chargingPoints, id]);
 
-	const onSubmit = async (chargingPoint: SelectedChargingPointType) => {
+	const onSubmit = async () => {
 		if (
 			selectedValue.address &&
 			selectedValue.chargerType &&
-			selectedValue.availability
+			selectedValue.availability &&
+			id
 		) {
 			await modifyPoint({
-				...chargingPoint,
-				charging_type: chargingPoint.chargerType
+				...selectedValue,
+				charging_type: selectedValue.chargerType,
+				id: Number(id)
 			});
 		}
 		router.back();
@@ -56,37 +42,13 @@ const Edit = () => {
 
 	return (
 		<View className="flex-1 justify-between">
-			<View>
-				<ModalPicker
-					label="Location"
-					defaultValue={currentChargingPoint?.address}
-					selectedValue={selectedValue.address}
-					onSelectValue={(value) =>
-						setSelectedValue((prev) => ({ ...prev, address: value }))
-					}
-					data={locationSuggestions}
-				/>
-				<ModalPicker
-					label="Charging Type"
-					defaultValue={currentChargingPoint?.charging_type}
-					selectedValue={selectedValue.chargerType}
-					onSelectValue={(value) =>
-						setSelectedValue((prev) => ({ ...prev, chargerType: value }))
-					}
-					data={TYPES}
-				/>
-				<ModalPicker
-					label="Availability"
-					defaultValue={currentChargingPoint?.availability}
-					selectedValue={selectedValue.availability}
-					onSelectValue={(value) =>
-						setSelectedValue((prev) => ({ ...prev, availability: value }))
-					}
-					data={AVAILABILITY}
-				/>
-			</View>
+			<SelectPointsData
+				formData={selectedValue}
+				fillForm={setSelectedValue}
+				defaultState={currentChargingPoint}
+			/>
 			<TouchableOpacity
-				onPress={() => onSubmit(selectedValue)}
+				onPress={onSubmit}
 				className="m-10 bg-secondary p-2 justify-center items-center rounded"
 				activeOpacity={0.8}
 			>

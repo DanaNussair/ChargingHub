@@ -13,23 +13,14 @@ import {
 	modifyChargingPoint
 } from '@/helpers/db';
 import { useSQLiteContext } from 'expo-sqlite';
-import { ChargingPointsType } from '@/types/db';
-
-interface ChargingPoint {
-	id: number;
-	address: string;
-	charging_type: string;
-	availability: string;
-	created_at: string;
-	updated_at: string;
-}
+import { SQLAddPointsType, SQLChargingPointsType } from '@/types/db';
 
 interface ChargingPointsContextType {
-	chargingPoints: ChargingPoint[];
-	addPoint: (chargingPoint: ChargingPointsType) => Promise<void>;
+	chargingPoints: SQLChargingPointsType[];
+	addPoint: (chargingPoint: SQLAddPointsType) => Promise<void>;
 	refreshPoints: () => Promise<void>;
-	deletePoint: (chargingPoint: ChargingPointsType) => Promise<void>;
-	modifyPoint: (chargingPoint: ChargingPointsType) => Promise<void>;
+	deletePoint: (chargingPoint: SQLChargingPointsType) => Promise<void>;
+	modifyPoint: (chargingPoint: SQLChargingPointsType) => Promise<void>;
 }
 
 const ChargingPointsContext = createContext<
@@ -41,7 +32,9 @@ export const ChargingPointsProvider = ({
 }: {
 	children: ReactNode;
 }) => {
-	const [chargingPoints, setChargingPoints] = useState<ChargingPoint[]>([]);
+	const [chargingPoints, setChargingPoints] = useState<
+		SQLChargingPointsType[] | []
+	>([]);
 	const db = useSQLiteContext();
 
 	const fetchChargingPoints = useCallback(async () => {
@@ -53,7 +46,7 @@ export const ChargingPointsProvider = ({
 		}
 	}, [db]);
 
-	const addPoint = async (chargingPoint: ChargingPointsType) => {
+	const addPoint = async (chargingPoint: SQLAddPointsType) => {
 		try {
 			await addChargingPoint(db, chargingPoint);
 			await fetchChargingPoints(); // Refresh the list after adding a new point
@@ -62,16 +55,18 @@ export const ChargingPointsProvider = ({
 		}
 	};
 
-	const deletePoint = async (chargingPoint: ChargingPointsType) => {
+	const deletePoint = async (chargingPoint: SQLChargingPointsType) => {
 		try {
-			await deleteChargingPoint(db, chargingPoint.id);
-			await fetchChargingPoints(); // Refresh the list after adding a new point
+			if (chargingPoint.id) {
+				await deleteChargingPoint(db, chargingPoint.id);
+				await fetchChargingPoints(); // Refresh the list after adding a new point
+			}
 		} catch (error) {
 			console.error('Failed to add charging point', error);
 		}
 	};
 
-	const modifyPoint = async (chargingPoint: ChargingPointsType) => {
+	const modifyPoint = async (chargingPoint: SQLChargingPointsType) => {
 		try {
 			await modifyChargingPoint(db, chargingPoint);
 			await fetchChargingPoints(); // Refresh the list after adding a new point

@@ -1,9 +1,9 @@
-export type PickerItemType = { value: string; label: string };
+export type DataItemType = { value: string; label: string };
 
 export type SelectedChargingPointType = {
-	address: PickerItemType | null;
-	chargerType: PickerItemType | null;
-	availability: PickerItemType | null;
+	address: string;
+	chargerType: string;
+	availability: string;
 };
 
 export type FetchedLocationType = {
