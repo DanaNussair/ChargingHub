@@ -10,18 +10,25 @@ import { ChargingPointsProvider } from '@/contexts/ChargingPointsContextProvider
 SplashScreen.preventAutoHideAsync();
 
 const loadSQLiteDb = async () => {
-	const dbName = 'ChargingHub.db';
-	const dbAsset = require('../assets/ChargingHub.db');
-	const dbUri = Asset.fromModule(dbAsset).uri;
-	const dbFilePath = `${FileSystem.documentDirectory}SQLite/${dbName}`;
+	try {
+		const dbName = 'ChargingHub.db';
+		const dbAsset = require('../assets/ChargingHub.db');
+		const dbUri = Asset.fromModule(dbAsset).uri;
+		const dbFilePath = `${FileSystem.documentDirectory}SQLite/${dbName}`;
+		const fileInfo = await FileSystem.getInfoAsync(dbFilePath);
 
-	const fileInfo = await FileSystem.getInfoAsync(dbFilePath);
-	if (!fileInfo.exists) {
-		await FileSystem.makeDirectoryAsync(
-			`${FileSystem.documentDirectory}SQLite`,
-			{ intermediates: true }
-		);
-		await FileSystem.downloadAsync(dbUri, dbFilePath);
+		if (!fileInfo.exists) {
+			await FileSystem.makeDirectoryAsync(
+				`${FileSystem.documentDirectory}SQLite`,
+				{ intermediates: true }
+			);
+			await FileSystem.downloadAsync(dbUri, dbFilePath);
+			console.log('Database downloaded to:', dbFilePath);
+		} else {
+			console.log('Database already exists at:', dbFilePath);
+		}
+	} catch (error) {
+		console.error('Error loading SQLite database:', error);
 	}
 };
 

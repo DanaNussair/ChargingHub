@@ -47,7 +47,7 @@ https://github.com/user-attachments/assets/e54c0549-adfa-48b9-8471-510d82f15914
 
 - [ ] The TextInputs display values directly from the DB instead of the label intended.
 
-- [ ] Need to make sure that I prevent queries from being ran without sanitizing the values first.
+- [ ] Need to make sure that I prevent queries from being run without sanitizing the values first.
 
 - [ ] Enhance the Picker. On android it does not need to be in a modal, this causes a bad user experience because there are many clicks needed in order to select a value.
 
@@ -56,7 +56,7 @@ https://github.com/user-attachments/assets/e54c0549-adfa-48b9-8471-510d82f15914
 - [ ] Add unit testing.
 
 ## Notes
-A `.sql` file can be found in the root folder which includes a couple of SQL statement to if needed.
+A `.sql` file can be found in the root folder which includes a couple of SQL statements to use if needed.
 
 
 

@@ -71,7 +71,6 @@ export const ChargingPointsProvider = ({
 	};
 
 	const modifyPoint = async (chargingPoint: ChargingPointsType) => {
-		console.log('modifyPoint');
 		try {
 			await modifyChargingPoint(db, chargingPoint);
 			await fetchChargingPoints(); // Refresh the list after adding a new point
