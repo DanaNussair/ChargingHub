@@ -2,6 +2,7 @@ import { View, Text, Modal, Pressable, TextInput } from 'react-native';
 import React, { useRef, useState } from 'react';
 import { Picker } from '@react-native-picker/picker';
 import { PickerItemType } from '@/types';
+import { FontAwesome6 } from '@expo/vector-icons';
 
 type ModalPickerProps = {
 	label: string;
@@ -42,30 +43,33 @@ const ModalPicker = ({
 				onRequestClose={onClose}
 				onDismiss={onClose}
 				presentationStyle="formSheet"
+				className="relative"
 			>
-				<Pressable onPress={onClose}>
-					<Text>Close</Text>
+				<Pressable onPress={onClose} className="absolute p-2 right-1">
+					<FontAwesome6 name="xmark" size={25} color="#027162" />
 				</Pressable>
-				<Picker
-					selectedValue={selectedValue}
-					onValueChange={(itemValue) => {
-						if (itemValue) onSelectValue(itemValue);
-						setIsOpen(false);
-					}}
-					itemStyle={{
-						height: '100%'
-					}}
-				>
-					{data.map((item) => {
-						return (
-							<Picker.Item
-								key={item.value}
-								label={item.label}
-								value={item.value}
-							/>
-						);
-					})}
-				</Picker>
+				<View className="mt-[35px]">
+					<Picker
+						selectedValue={selectedValue}
+						onValueChange={(itemValue) => {
+							if (itemValue) onSelectValue(itemValue);
+							setIsOpen(false);
+						}}
+						itemStyle={{
+							height: '100%'
+						}}
+					>
+						{data.map((item) => {
+							return (
+								<Picker.Item
+									key={item.value}
+									label={item.label}
+									value={item.value}
+								/>
+							);
+						})}
+					</Picker>
+				</View>
 			</Modal>
 		</View>
 	);

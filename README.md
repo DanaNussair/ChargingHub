@@ -45,6 +45,8 @@ This project implements a simple react-native application called `ChargingHub` w
 
 - Need to make sure that I prevent queries from being ran without sanitizing the values first.
 
+- Enhance the Picker. On android it does not need to be in a modal, this causes a bad user experience because there are many clicks needed in order to select a value.
+
 - Add unit testing.
 
 ## Notes
