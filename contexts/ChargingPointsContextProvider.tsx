@@ -3,7 +3,8 @@ import React, {
 	useState,
 	useEffect,
 	ReactNode,
-	useContext
+	useContext,
+	useCallback
 } from 'react';
 import {
 	getChargingPoints,
@@ -43,14 +44,14 @@ export const ChargingPointsProvider = ({
 	const [chargingPoints, setChargingPoints] = useState<ChargingPoint[]>([]);
 	const db = useSQLiteContext();
 
-	const fetchChargingPoints = async () => {
+	const fetchChargingPoints = useCallback(async () => {
 		try {
 			const points = await getChargingPoints(db);
 			setChargingPoints(points);
 		} catch (error) {
 			console.error('Failed to fetch charging points', error);
 		}
-	};
+	}, [db]);
 
 	const addPoint = async (chargingPoint: ChargingPointsType) => {
 		try {
@@ -85,7 +86,7 @@ export const ChargingPointsProvider = ({
 
 	useEffect(() => {
 		fetchChargingPoints();
-	}, []);
+	}, [fetchChargingPoints]);
 
 	return (
 		<ChargingPointsContext.Provider
