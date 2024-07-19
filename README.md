@@ -24,6 +24,8 @@ This project implements a simple react-native application called `ChargingHub` w
 - `Profile` tab allows user to see all the charging points added. They can also delete points and choose to modify.
 - Modifying navigates to the `Edit` screen which allows the user to modify the selected point.
 
+https://github.com/user-attachments/assets/e54c0549-adfa-48b9-8471-510d82f15914
+
 
 ## Challenges faced
 - Faced challenges in using pre-built libraries for dropdown/searchable dropdown components. Nothing seem to work as expected and most rendered unusable. I opted to build my own component for the time being.
