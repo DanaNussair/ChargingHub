@@ -59,7 +59,7 @@ export const ChargingPointsProvider = ({
 		try {
 			if (chargingPoint.id) {
 				await deleteChargingPoint(db, chargingPoint.id);
-				await fetchChargingPoints(); // Refresh the list after adding a new point
+				await fetchChargingPoints();
 			}
 		} catch (error) {
 			console.error('Failed to add charging point', error);
@@ -69,7 +69,7 @@ export const ChargingPointsProvider = ({
 	const modifyPoint = async (chargingPoint: SQLChargingPointsType) => {
 		try {
 			await modifyChargingPoint(db, chargingPoint);
-			await fetchChargingPoints(); // Refresh the list after adding a new point
+			await fetchChargingPoints();
 		} catch (error) {
 			console.error('Failed to add charging point', error);
 		}
