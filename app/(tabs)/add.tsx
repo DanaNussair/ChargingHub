@@ -20,6 +20,7 @@ const AddChargingPoint = () => {
 				charging_type: chargingPoint.chargerType,
 				availability: chargingPoint.availability
 			});
+			setSelectedValue({ address: '', availability: '', chargerType: '' });
 		}
 	};
 
