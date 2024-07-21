@@ -44,12 +44,18 @@ const ModalPicker = ({
 				onDismiss={onClose}
 				presentationStyle="formSheet"
 				className="relative"
+				testID="modal"
 			>
-				<Pressable onPress={onClose} className="absolute p-2 right-1">
+				<Pressable
+					onPress={onClose}
+					className="absolute p-2 right-1"
+					testID="close-button"
+				>
 					<FontAwesome6 name="xmark" size={25} color="#027162" />
 				</Pressable>
 				<View className="mt-[35px]">
 					<Picker
+						testID="picker"
 						selectedValue={selectedValue}
 						onValueChange={(itemValue) => {
 							if (itemValue) onSelectValue(itemValue);

@@ -14,7 +14,11 @@ This project implements a simple react-native application called `ChargingHub` w
    ```
    npx expo start
    ```
-3. This project uses eslint and prettier to format the code according to a specific standard, to run the linter:
+3. To run tests
+   ```
+   npm run test
+   ```
+4. This project uses eslint and prettier to format the code according to a specific standard, to run the linter:
    ```
    npx expo lint 
    // Or you can fix (fixable) linting issues using
@@ -57,7 +61,7 @@ https://github.com/user-attachments/assets/e54c0549-adfa-48b9-8471-510d82f15914
 
 - [ ] Need to improve on error handling and loading.
 
-- [ ] Add unit testing.
+- [x] Add unit testing. &#8594; <i><b>Still a work in progress</b></i>
 
 ## Notes
 A `.sql` file can be found in the root folder which includes a couple of SQL statements to use if needed.
